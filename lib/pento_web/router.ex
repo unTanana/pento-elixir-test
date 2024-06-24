@@ -15,6 +15,8 @@ defmodule PentoWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug :fetch_current_user
   end
 
   scope "/", PentoWeb do
@@ -24,9 +26,10 @@ defmodule PentoWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", PentoWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", PentoWeb do
+    pipe_through [:api, :require_authenticated_user]
+    resources "/products", ProductController
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:pento, :dev_routes) do

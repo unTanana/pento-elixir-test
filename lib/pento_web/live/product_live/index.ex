@@ -1,11 +1,18 @@
 defmodule PentoWeb.ProductLive.Index do
   use PentoWeb, :live_view
 
+  alias PentoWeb.Endpoint
   alias Pento.Catalog
   alias Pento.Catalog.Product
 
+  @products_topic "product"
+
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket) do
+      Endpoint.subscribe(@products_topic)
+    end
+
     {:ok, stream(socket, :products, Catalog.list_products())}
   end
 
@@ -34,6 +41,10 @@ defmodule PentoWeb.ProductLive.Index do
 
   @impl true
   def handle_info({PentoWeb.ProductLive.FormComponent, {:saved, product}}, socket) do
+    {:noreply, stream_insert(socket, :products, product)}
+  end
+
+  def handle_info(%{event: "product_updated", payload: %{product: product}}, socket) do
     {:noreply, stream_insert(socket, :products, product)}
   end
 
