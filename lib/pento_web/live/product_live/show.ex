@@ -1,10 +1,17 @@
 defmodule PentoWeb.ProductLive.Show do
+  alias PentoWeb.Endpoint
   use PentoWeb, :live_view
 
   alias Pento.Catalog
 
+  @products_topic "product"
+
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket) do
+      Endpoint.subscribe(@products_topic)
+    end
+
     {:ok, socket}
   end
 
@@ -14,6 +21,11 @@ defmodule PentoWeb.ProductLive.Show do
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:product, Catalog.get_product!(id))}
+  end
+
+  @impl true
+  def handle_info(%{event: "product_updated", payload: %{product: product}}, socket) do
+    {:noreply, assign(socket, :product, product)}
   end
 
   defp page_title(:show), do: "Show Product"
