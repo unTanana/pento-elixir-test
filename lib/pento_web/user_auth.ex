@@ -36,6 +36,15 @@ defmodule PentoWeb.UserAuth do
     |> redirect(to: user_return_to || signed_in_path(conn))
   end
 
+  def api_log_in_user(conn, user) do
+    token = Accounts.create_user_api_token(user)
+
+    # 200 OK and token in response
+    conn
+    |> put_status(:ok)
+    |> json(%{token: token})
+  end
+
   defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do
     put_resp_cookie(conn, @remember_me_cookie, token, @remember_me_options)
   end
@@ -210,6 +219,16 @@ defmodule PentoWeb.UserAuth do
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
       |> halt()
+    end
+  end
+
+  def fetch_api_user(conn, _opts) do
+    with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
+         {:ok, user} <- Accounts.fetch_user_by_api_token(token) do
+      assign(conn, :current_user, user)
+    else
+      _ ->
+        assign(conn, :current_user, nil)
     end
   end
 

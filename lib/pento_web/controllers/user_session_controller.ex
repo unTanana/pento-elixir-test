@@ -34,6 +34,18 @@ defmodule PentoWeb.UserSessionController do
     end
   end
 
+  def api_log_in(conn, %{"email" => email, "password" => password}) do
+    if user = Accounts.get_user_by_email_and_password(email, password) do
+      conn
+      |> UserAuth.api_log_in_user(user)
+    else
+      # 400 Bad Request
+      conn
+      |> put_status(:bad_request)
+      |> json(%{error: "Invalid email or password"})
+    end
+  end
+
   def delete(conn, _params) do
     conn
     |> put_flash(:info, "Logged out successfully.")

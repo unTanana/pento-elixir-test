@@ -49,6 +49,11 @@ defmodule PentoWeb.ConnCase do
     %{conn: log_in_user(conn, user), user: user}
   end
 
+  def register_and_log_in_user_for_api(%{conn: conn}) do
+    user = Pento.AccountsFixtures.user_fixture()
+    %{conn: log_in_user_for_api(conn, user), user: user}
+  end
+
   @doc """
   Logs the given `user` into the `conn`.
 
@@ -56,6 +61,14 @@ defmodule PentoWeb.ConnCase do
   """
   def log_in_user(conn, user) do
     token = Pento.Accounts.generate_user_session_token(user)
+
+    conn
+    |> Phoenix.ConnTest.init_test_session(%{})
+    |> Plug.Conn.put_session(:user_token, token)
+  end
+
+  def log_in_user_for_api(conn, user) do
+    token = Pento.Accounts.create_user_api_token(user)
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})

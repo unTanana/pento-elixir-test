@@ -24,7 +24,7 @@ defmodule PentoWeb.ProductControllerTest do
   end
 
   describe "index" do
-    setup [:register_and_log_in_user]
+    setup [:register_and_log_in_user_for_api]
 
     test "lists all products", %{conn: conn} do
       conn = get(conn, ~p"/api/products")
@@ -33,7 +33,7 @@ defmodule PentoWeb.ProductControllerTest do
   end
 
   describe "create product" do
-    setup [:register_and_log_in_user]
+    setup [:register_and_log_in_user_for_api]
 
     test "renders product when data is valid", %{conn: conn} do
       conn = post(conn, ~p"/api/products", product: @create_attrs)
@@ -57,7 +57,7 @@ defmodule PentoWeb.ProductControllerTest do
   end
 
   describe "update product" do
-    setup [:create_product, :register_and_log_in_user]
+    setup [:create_product, :register_and_log_in_user_for_api]
 
     test "renders product when data is valid", %{conn: conn, product: %Product{id: id} = product} do
       conn = put(conn, ~p"/api/products/#{product}", product: @update_attrs)
@@ -81,7 +81,7 @@ defmodule PentoWeb.ProductControllerTest do
   end
 
   describe "delete product" do
-    setup [:create_product, :register_and_log_in_user]
+    setup [:create_product, :register_and_log_in_user_for_api]
 
     test "deletes chosen product", %{conn: conn, product: product} do
       conn = delete(conn, ~p"/api/products/#{product}")

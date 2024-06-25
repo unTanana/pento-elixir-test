@@ -15,14 +15,18 @@ defmodule PentoWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
-    plug :fetch_session
-    plug :fetch_current_user
+    plug :fetch_api_user
   end
 
   scope "/", PentoWeb do
     pipe_through :browser
 
     get "/", PageController, :home
+  end
+
+  scope "/api", PentoWeb do
+    pipe_through [:api]
+    post "/login", UserSessionController, :api_log_in
   end
 
   # Other scopes may use custom stacks.
