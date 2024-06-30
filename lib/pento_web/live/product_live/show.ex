@@ -28,6 +28,12 @@ defmodule PentoWeb.ProductLive.Show do
     {:noreply, assign(socket, :product, product)}
   end
 
+  # handle notify_parent messages
+  @impl true
+  def handle_info({PentoWeb.ProductLive.FormComponent, {:saved, product}}, socket) do
+    {:noreply, assign(socket, :product, product)}
+  end
+
   defp page_title(:show), do: "Show Product"
   defp page_title(:edit), do: "Edit Product"
 end

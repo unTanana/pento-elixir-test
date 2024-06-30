@@ -1,4 +1,7 @@
 defmodule PentoWeb.UserAuth do
+  @moduledoc """
+  The UserAuth module.
+  """
   use PentoWeb, :verified_routes
 
   import Plug.Conn
@@ -218,6 +221,20 @@ defmodule PentoWeb.UserAuth do
       |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
+      |> halt()
+    end
+  end
+
+  @doc """
+  Used for apis that require the user to be authenticated.
+  """
+  def require_authenticated_api_user(conn, _opts) do
+    if conn.assigns[:current_user] do
+      conn
+    else
+      conn
+      |> put_status(:unauthorized)
+      |> json(%{error: "Unauthorized"})
       |> halt()
     end
   end

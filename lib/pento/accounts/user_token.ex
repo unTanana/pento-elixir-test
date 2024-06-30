@@ -1,4 +1,8 @@
 defmodule Pento.Accounts.UserToken do
+  @moduledoc """
+  The Accounts.UserToken module.
+  """
+
   use Ecto.Schema
   import Ecto.Query
   alias Pento.Accounts.UserToken

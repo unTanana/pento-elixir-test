@@ -41,7 +41,7 @@ defmodule PentoWeb do
       use Phoenix.Controller,
         formats: [:html, :json],
         layouts: [html: PentoWeb.Layouts]
-     
+
       import Plug.Conn
       import PentoWeb.Gettext
 

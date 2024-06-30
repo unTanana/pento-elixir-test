@@ -1,4 +1,6 @@
 defmodule PentoWeb.ProductControllerTest do
+  @moduledoc false
+
   use PentoWeb.ConnCase
 
   import Pento.CatalogFixtures

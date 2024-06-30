@@ -31,7 +31,7 @@ defmodule PentoWeb.Router do
 
   # Other scopes may use custom stacks.
   scope "/api", PentoWeb do
-    pipe_through [:api, :require_authenticated_user]
+    pipe_through [:api, :require_authenticated_api_user]
     resources "/products", ProductController
   end
 
