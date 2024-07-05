@@ -80,4 +80,18 @@ defmodule Pento.Accounts.UserNotifier do
     ==============================
     """)
   end
+
+  # Sends email without attachments using the application mailer.
+  def send_email(recipient, subject, body) do
+    email =
+      new()
+      |> to(recipient)
+      |> from({"Pento", "contact@example.com"})
+      |> subject(subject)
+      |> text_body(body)
+
+    with {:ok, _metadata} <- Mailer.deliver(email) do
+      {:ok, email}
+    end
+  end
 end

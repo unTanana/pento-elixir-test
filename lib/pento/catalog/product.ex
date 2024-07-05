@@ -23,6 +23,7 @@ defmodule Pento.Catalog.Product do
     |> unique_constraint(:sku)
   end
 
+  @doc false
   def lower_price_changeset(product, attrs) do
     product
     |> cast(attrs, [:unit_price])
